@@ -32,5 +32,11 @@ public class ObservableConcat {
                     memoryCache = "memory";
                     System.out.println("--------------subscribe:" + s);
                 });
+        
+        System.out.println("=======================");
+        Observable.merge(memory, network).subscribe(s -> {
+            memoryCache = "memory";
+            System.out.println("--------------subscribe:" + s);
+        });
     }
 }
