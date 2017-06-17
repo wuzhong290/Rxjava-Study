@@ -11,19 +11,12 @@ import io.reactivex.schedulers.Schedulers;
  * Created by wuzhong on 2017/6/16.
  */
 public class ObservableConcat {
-    static String memoryCache = "1";
     public static void main(String[] args) {
         Observable<String> memory = Observable.create(new ObservableOnSubscribe<String>(){
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
-                //e.onError(new Exception("memory-Exception"));
+                e.onError(new Exception("memory-Exception"));
                 e.onNext("memory");
-//                if(StringUtils.isNotBlank(memoryCache)){
-//                    e.onNext(memoryCache);
-//                    e.onComplete();
-//                }else{
-//                    e.onComplete();
-//                }
             }
         }).subscribeOn(Schedulers.newThread());
 
@@ -39,51 +32,16 @@ public class ObservableConcat {
 
         Observable<String> network = Observable.just("network").subscribeOn(Schedulers.newThread()).cache();
 
-//        Observable.concat(memory, dist, network)
-//                .observeOn(ImmediateThinScheduler.INSTANCE)
-//                .subscribe(s -> {
-//                    memoryCache = "memory";
-//                    System.out.println(Thread.currentThread().getName() + "--------------subscribe1:" + s);
-//                },e ->{
-//                    System.out.println(e.getMessage());
-//                });
-        System.out.println(Thread.currentThread().getName() + "=======================2");
-        Observable.merge(memory,dist, network)
+        Observable.concat(memory, dist, network)
                 .observeOn(ImmediateThinScheduler.INSTANCE)
                 .subscribe(s -> {
-                    System.out.println(Thread.currentThread().getName() + "--------------subscribe2:" + s);
+                    System.out.println(Thread.currentThread().getName() + "--------------onNext:" + s);
                 },e ->{
-                    System.out.println(Thread.currentThread().getName() + e.getMessage());
+                    System.out.println(Thread.currentThread().getName() + e.getMessage() + "--------------onError");
                 },() ->{
-                    System.out.println(Thread.currentThread().getName() + "--------------subscribe2");
+                    System.out.println(Thread.currentThread().getName() + "--------------onComplete");
                 });
-//
-//        System.out.println(Thread.currentThread().getName() + "=======================3");
-//
-//        Observable.zip(memory, dist, new BiFunction<String, String, Object>() {
-//                    @Override
-//                    public Object apply(@NonNull String s, @NonNull String s2) throws Exception {
-//                        return s+":"+s2;
-//                    }
-//                })
-//                .observeOn(ImmediateThinScheduler.INSTANCE)
-//                .subscribe(s -> {
-//                    System.out.println(Thread.currentThread().getName() + "--------------subscribe3:" + s);
-//                });
-//
-//        System.out.println(Thread.currentThread().getName() + "=======================4");
-//
-//        Observable.zip(network, dist, new BiFunction<String, String, Object>() {
-//                    @Override
-//                    public Object apply(@NonNull String s, @NonNull String s2) throws Exception {
-//                        return s+":"+s2;
-//                    }
-//                })
-//                .observeOn(ImmediateThinScheduler.INSTANCE)
-//                .subscribe(s -> {
-//                    System.out.println(Thread.currentThread().getName() + "--------------subscribe4:" + s);
-//                });
-//
+
         System.out.println(Thread.activeCount());
         try {
             Thread.sleep(1000);
