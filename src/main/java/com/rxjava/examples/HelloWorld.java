@@ -22,7 +22,8 @@ public class HelloWorld {
     }
 
 }
-class DemoObserver implements Observer<java.lang.String>{
+
+class DemoObserver implements Observer<String>{
     private String result = "";
     @Override
     public void onSubscribe(@NonNull Disposable d) {
