@@ -36,7 +36,7 @@ public class ObservableConcat {
             }
         }).subscribeOn(ImmediateThinScheduler.INSTANCE).cache();
 
-        Observable<String> network = Observable.just("network").subscribeOn(Schedulers.newThread());
+        Observable<String> network = Observable.just("network").subscribeOn(Schedulers.newThread()).cache();
 
         Observable.concat(memory, dist, network)
                 .observeOn(ImmediateThinScheduler.INSTANCE)
