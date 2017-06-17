@@ -88,6 +88,10 @@ public class ObservableTimeout {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println(disposable.isDisposed());
+        if(!disposable.isDisposed()){
+            disposable.dispose();
+        }
         System.out.println(Thread.activeCount());
     }
 }

@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.ImmediateThinScheduler;
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,7 +33,7 @@ public class ObservableConcat {
 
         Observable<String> network = Observable.just("network").subscribeOn(Schedulers.newThread()).cache();
 
-        Observable.concat(memory, dist, network)
+        Disposable disposable = Observable.concat(memory, dist, network)
                 .observeOn(ImmediateThinScheduler.INSTANCE)
                 .subscribe(s -> {
                     System.out.println(Thread.currentThread().getName() + "--------------onNext:" + s);
@@ -49,6 +50,9 @@ public class ObservableConcat {
             e.printStackTrace();
         }
         System.out.println(Thread.activeCount());
-        System.out.println("sddd");
+        System.out.println(disposable.isDisposed());
+        if(!disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 }
