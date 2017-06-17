@@ -15,16 +15,17 @@ import java.util.concurrent.TimeUnit;
  * Created by wuzhong on 2017/6/17.
  */
 public class ObservableTimeout {
+
     public static void main(String[] args) {
+        RxJavaPlugins.setErrorHandler(error ->{
+            System.out.println(Thread.currentThread().getName() + error.getMessage()+ "--------------setErrorHandler");
+        });
         Observable<String> memory = Observable.create(new ObservableOnSubscribe<String>(){
                     @Override
                     public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
                         try {
                             Thread.sleep(200);
                         }catch (Exception ex){
-                            RxJavaPlugins.setErrorHandler(error ->{
-                                System.out.println(Thread.currentThread().getName() + error.getMessage()+ "--------------setErrorHandler");
-                            });
                             e.onError(new Exception("sleep"));
                         }
                         System.out.println(Thread.currentThread().getName() + "memory");
