@@ -17,7 +17,6 @@ public class HelloWorld {
         System.out.println(new HelloWorld().helloWorld());
     }
 
-
     public String helloWorld(){
         Future<String> f = Observable.just("Hello").toFuture();
         if (f.isDone()) {
