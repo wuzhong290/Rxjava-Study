@@ -26,7 +26,6 @@ public class HelloWorld {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
-
             }
         }
         return "";
